@@ -48,9 +48,11 @@ Tesseract OCR без дообучения + словарная проверка 
 Бастрыкин Валентин – frontend-разработчик, Петросян Ирина – AI-инженер, Штангей София – backend-разработчик.
 
 # Ссылка на analogs.md
-*Будет добавлено после*
+[Анализ аналогов](docs/analogs.md)
 
 # Инструкция по запуску baseline
 *Будет добавлено после реализации baseline*
 
+# Ссылка на сырые фотографии рукописного текста:
+https://drive.google.com/drive/folders/13KV6TkamMZytpXVi1HmJPQJCDNPWtu-D?usp=share_link
 
