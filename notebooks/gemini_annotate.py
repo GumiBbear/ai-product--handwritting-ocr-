@@ -22,7 +22,7 @@ PROMPT = """Распознай русский рукописный текст н
 
 # Настройка Gemini
 genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-pro')
 
 # Список фото
 photos = [f for f in os.listdir(INPUT_DIR) if f.endswith(('.jpg', '.jpeg', '.png'))]
