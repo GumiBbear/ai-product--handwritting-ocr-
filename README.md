@@ -53,7 +53,7 @@ Tesseract OCR без дообучения + словарная проверка 
 
 # Инструкция по запуску baseline
 Скрипт [baseline_tesseract](src/baseline_tesseract.py):
-- Загружает тестовые кейсы из `data/test_cases/queries_answers.json`
+- Загружает тестовые кейсы из [queries_answers](data/test_cases/queries_answers.json)
 - Распознаёт текст через Tesseract OCR на русском языке
 - Сравнивает с эталоном (вручную расшифрованные тексты)
 - Вычисляет **CER** (символьную ошибку) и **WER** (словесную ошибку) для каждого фото
