@@ -39,7 +39,7 @@ def calculate_wer(reference, hypothesis):
 
 # Пути
 project_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-images_dir = os.path.join(project_dir, "data", "raw", "images")
+images_dir = os.path.join(project_dir, "data", "raw")
 test_cases_file = os.path.join(project_dir, "data", "test_cases", "queries_answers.json")
 
 # Загрузка тестовых кейсов
