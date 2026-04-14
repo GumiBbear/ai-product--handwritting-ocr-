@@ -1,35 +1,28 @@
 import os
 import json
-import google.generativeai as genai
+from google import genai
 from PIL import Image
 import time
 
-# API-ключ Gemini 
-API_KEY = "AIzaSyChPgftXyJGqEUOfYD5TCPHo6gMlF5eXzM"
 
-# Фото для разметки
+API_KEY = "AIzaSyBvLuxOnaHrq_8LoIGVD-DrN9nsjA7hVJ4"
+
 INPUT_DIR = "data/raw"
-
-# Выходной файл с результатами разметки
 OUTPUT_FILE = "data/annotated_dataset.jsonl"
 
 # Промпт для Gemini
-PROMPT = """Распознай русский рукописный текст на изображении.
-Верни ТОЛЬКО распознанный текст, без комментариев и пояснений.
-Если текст неразборчив, напиши [НЕРАЗБОРЧИВО].
-Сохрани орфографию и пунктуацию как есть.
-Не добавляй слова от себя."""
+PROMPT_TEXT = """Внимательно прочитай весь русский рукописный текст на изображении.
+Распознай и выведи ВЕСЬ текст ПОЛНОСТЬЮ, от начала до конца.
+Не сокращай, не пропускай абзацы, не обрезай.
+Верни только текст, без комментариев и пояснений.
+Если текст длинный — выведи его целиком.
+"""
 
-# Настройка Gemini
-genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel('gemini-pro')
+client = genai.Client(api_key=API_KEY)
 
 # Список фото
 photos = [f for f in os.listdir(INPUT_DIR) if f.endswith(('.jpg', '.jpeg', '.png'))]
 print(f"Найдено фото: {len(photos)}")
-print(f"Папка: {INPUT_DIR}")
-print(f"Результаты будут сохранены в: {OUTPUT_FILE}")
-print("=" * 60)
 
 # Обработка
 results = []
@@ -37,38 +30,32 @@ for i, photo in enumerate(photos, 1):
     print(f"\n[{i}/{len(photos)}] Обработка: {photo}")
     
     try:
-        # Открываем фото
         img_path = os.path.join(INPUT_DIR, photo)
         img = Image.open(img_path)
+
+        # Отправляем запрос в новом формате
+        response = client.models.generate_content(
+            model="gemini-flash-lite-latest", # Модель Gemini
+            contents=[PROMPT_TEXT, img],
+            config={
+                "max_output_tokens": 8192,  # максимум токенов в ответе
+                "temperature": 0.1          
+            }
+        )
         
-        # Отправляем в Gemini
-        response = model.generate_content([PROMPT, img])
         text = response.text.strip()
-        
-        # Сохраняем результат
-        results.append({
-            "image": photo,
-            "text": text
-        })
-        
-        print(f"Распознано: {text[:80]}...")
+        results.append({"image": photo, "text": text})
+        print(f"  ✅ Распознано: {text[:80]}...")
         
     except Exception as e:
-        print(f"Ошибка: {e}")
-        results.append({
-            "image": photo,
-            "text": "[ОШИБКА]"
-        })
+        print(f"  ❌ Ошибка: {e}")
+        results.append({"image": photo, "text": "[ОШИБКА]"})
     
-    # Задержка между запросами (не более 60 запросов в минуту)
-    time.sleep(1)
+    time.sleep(1) # Задержка для соблюдения лимитов
 
-# Результаты
+# Сохранение результатов
 with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
     for item in results:
         f.write(json.dumps(item, ensure_ascii=False) + '\n')
 
-print("\n" + "=" * 60)
-print(f"Готово! Обработано фото: {len(results)}")
-print(f"Результаты сохранены в: {OUTPUT_FILE}")
-print("=" * 60)
+print("\nГотово!")
