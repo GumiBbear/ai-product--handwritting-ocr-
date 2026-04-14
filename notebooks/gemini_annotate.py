@@ -45,10 +45,10 @@ for i, photo in enumerate(photos, 1):
         
         text = response.text.strip()
         results.append({"image": photo, "text": text})
-        print(f"  ✅ Распознано: {text[:80]}...")
+        print(f"Распознано: {text[:80]}...")
         
     except Exception as e:
-        print(f"  ❌ Ошибка: {e}")
+        print(f"Ошибка: {e}")
         results.append({"image": photo, "text": "[ОШИБКА]"})
     
     time.sleep(1) # Задержка для соблюдения лимитов
