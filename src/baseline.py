@@ -24,9 +24,6 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 print("📚 Загружаю словарь для проверки орфографии...")
 spell = SpellChecker(language='ru')
 
-dict_path = os.path.join(script_dir, 'russian.txt')
-print(f"🔍 Ищу словарь по пути: {dict_path}")
-
 # 2. Загружаем EasyOCR
 print("📸 Загружаю EasyOCR...")
 reader = easyocr.Reader(['ru', 'en'])
