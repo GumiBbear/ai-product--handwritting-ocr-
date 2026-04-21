@@ -22,16 +22,10 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # 1. Загружаем словарь для проверки орфографии
 print("📚 Загружаю словарь для проверки орфографии...")
-spell = SpellChecker(language=None)
+spell = SpellChecker(language='ru')
 
 dict_path = os.path.join(script_dir, 'russian.txt')
 print(f"🔍 Ищу словарь по пути: {dict_path}")
-
-with open(dict_path, 'r', encoding='windows-1251') as f:
-    file_content = f.read()
-    spell.word_frequency.load_text(file_content)
-
-print(f"✅ Словарь загружен!")
 
 # 2. Загружаем EasyOCR
 print("📸 Загружаю EasyOCR...")
