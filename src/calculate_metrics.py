@@ -1,3 +1,5 @@
+# Расчёт метрик качества распознавания (CER, WER)
+
 import os
 import json
 import pytesseract
