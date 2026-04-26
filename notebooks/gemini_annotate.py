@@ -4,11 +4,13 @@ from google import genai
 from PIL import Image
 import time
 
+API_KEY = "AIzaSyArV9uuaEeUIYhNdmW2C0pbDnjqd7tkQew" # ключ проекта
 
-API_KEY = "AIzaSyBvLuxOnaHrq_8LoIGVD-DrN9nsjA7hVJ4"
+INPUT_DIR = "data/train" # путь к папке с изображениями
+OUTPUT_FILE = "data/recognize_text.json" # путь к файлу с расшифровкой
 
-INPUT_DIR = "data/raw"
-OUTPUT_FILE = "data/annotated_dataset.jsonl"
+print(f"Текущая рабочая директория: {os.getcwd()}")
+print(f"Полный путь к OUTPUT_FILE: {os.path.abspath(OUTPUT_FILE)}")
 
 # Промпт для Gemini
 PROMPT_TEXT = """Внимательно прочитай весь русский рукописный текст на изображении.
@@ -25,7 +27,6 @@ photos = [f for f in os.listdir(INPUT_DIR) if f.endswith(('.jpg', '.jpeg', '.png
 print(f"Найдено фото: {len(photos)}")
 
 # Обработка
-results = []
 for i, photo in enumerate(photos, 1):
     print(f"\n[{i}/{len(photos)}] Обработка: {photo}")
     
@@ -35,27 +36,39 @@ for i, photo in enumerate(photos, 1):
 
         # Отправляем запрос в новом формате
         response = client.models.generate_content(
-            model="gemini-flash-lite-latest", # Модель Gemini
+            model="gemini-2.5-flash", # Модель Gemini
             contents=[PROMPT_TEXT, img],
             config={
-                "max_output_tokens": 8192,  # максимум токенов в ответе
+                "max_output_tokens": 8192, 
                 "temperature": 0.1          
             }
         )
         
         text = response.text.strip()
-        results.append({"image": photo, "text": text})
+        result = {"image": photo, "text": text}
+        
+        # Сохраняем результат сразу
+        with open(OUTPUT_FILE, 'a', encoding='utf-8') as f:
+            f.write(json.dumps(result, ensure_ascii=False) + '\n')
+        
+        os.remove(img_path) 
         print(f"Распознано: {text[:80]}...")
         
     except Exception as e:
         print(f"Ошибка: {e}")
-        results.append({"image": photo, "text": "[ОШИБКА]"})
+        
+            
     
     time.sleep(1) # Задержка для соблюдения лимитов
 
-# Сохранение результатов
-with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-    for item in results:
-        f.write(json.dumps(item, ensure_ascii=False) + '\n')
-
 print("\nГотово!")
+
+# gemini-2.5-flash 
+# gemini-2.0-flash 
+# gemini-2.5-pro 
+# gemini-2.0-flash-lite 
+# gemini-2.0-flash-001 
+# gemini-flash-latest 
+# gemini-flash-lite-latest -
+# gemini-pro-latest 
+# gemini-2.5-flash-lite 
