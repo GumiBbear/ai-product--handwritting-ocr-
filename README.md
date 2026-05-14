@@ -66,6 +66,5 @@ Tesseract OCR без дообучения + словарная проверка 
 | WER (словесная ошибка) | 104.57% |
 
 
-# Ссылка на сырые фотографии рукописного текста:
-https://drive.google.com/drive/folders/13KV6TkamMZytpXVi1HmJPQJCDNPWtu-D?usp=share_link
-
+# Ссылка на используемый датасет рукописного текста:
+https://drive.google.com/drive/folders/1hbgHSFkU1Nbem2V_AAzG24NPJApRp2cH
